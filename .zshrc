@@ -30,10 +30,10 @@ alias git_prunegit_status='git remote prune origin --dry-run'
 alias runserver="./manage.py runserver"
 
 testapp(){
-  ./manage.py test --settings=voip10_web.settings.test $1
+  ./manage.py test --settings=voip10_web.settings.test voip10_web.$1
 }
 testappx2(){
-  REUSE_DB=1 ./manage.py test --settings=voip10_web.settings.test $1
+  REUSE_DB=1 ./manage.py test --settings=voip10_web.settings.test voip10_web.$1
 }
 
 plugins=( git ruby lighthouse git-flow brew zsh-syntax-highlighting )
