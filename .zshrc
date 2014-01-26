@@ -26,7 +26,15 @@ alias hide_finder_all="defaults write com.apple.finder AppleShowAllFiles FALSE; 
 alias git_prune='git remote prune origin'
 alias git_prunegit_status='git remote prune origin --dry-run'
 
-alias emacs="/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/Emacs "
+#DJANGO
+alias runserver="./manage.py runserver"
+
+testapp(){
+  ./manage.py test --settings=voip10_web.settings.test $1
+}
+testappx2(){
+  REUSE_DB=1 ./manage.py test --settings=voip10_web.settings.test $1
+}
 
 plugins=( git ruby lighthouse git-flow brew zsh-syntax-highlighting )
 
