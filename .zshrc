@@ -25,6 +25,40 @@ alias hide_finder_all="defaults write com.apple.finder AppleShowAllFiles FALSE; 
 #ALIASES GIT
 alias git_prune='git remote prune origin'
 alias git_prunegit_status='git remote prune origin --dry-run'
+alias grc='git rebase --continue'
+
+grhead(){
+  git rebase -i HEAD~$1
+}
+
+glog(){
+   git log -n $1
+}
+
+gchk(){
+  git checkout $1
+}
+
+gdelbr(){
+  git branch -d $1
+}
+
+alias gwhow="git status"
+alias gadd="git add -u"
+alias gpush="git push"
+alias gpull="git pull"
+
+gaf(){
+  git add $1
+}
+
+grf(){
+  git rm $1
+}
+
+gcom(){
+  git commit -m $1
+}
 
 #DJANGO
 alias runserver="./manage.py runserver"
