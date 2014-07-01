@@ -1,0 +1,24 @@
+[user]
+	email = manuteali@gmail.com
+	name = manute
+[core]
+	autocrlf = input
+	excludesfile = /home/manu/.gitignore_global
+	editor = sublime -n -w
+[push]
+	default = simple
+[mergetool "sublime"]
+	cmd = subl -w $MERGED
+	trustExitCode = false
+[merge]
+	tool = sublime
+[alias]
+	add-commit = !git add -A && git commit
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+[branch]
+	autosetuprebase = always
+[pull]
+	rebase = true
