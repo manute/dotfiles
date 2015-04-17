@@ -3,7 +3,7 @@
 	name = manute
 [core]
 	autocrlf = input
-	excludesfile = /home/manu/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	editor = sublime -n -w
 [push]
 	default = simple
