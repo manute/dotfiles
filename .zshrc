@@ -1,5 +1,24 @@
+#########################
+# CONFIGS
+#######################
+export LANG=en_US.UTF-8
+export EDITOR='emacs'
+export TERM=xterm-256color
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
+
+#NET
+alias net_ports=netstat -nlp
+alias net_all=netstat -a -n -p -l
+
+#OPEN
+alias open=xdg-open
+
+#EMACS CLIENT
+ec() {
+    emacsclient $1 &
+}
 
 #Virtual wrapper http://virtualenvwrapper.readthedocs.org/en/latest/
 VIRTUAL_ENV=$HOME/.virtualenvs/
@@ -8,8 +27,7 @@ export GOPATH=$HOME/go
 
 export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:$GOPATH/bin:$VIRTUAL_ENV:$PATH
 
-#Ports
-alias ports=netstat -nlp
+ZSH_THEME="robbyrussell"
 
 #ALIASES GIT
 grhead(){
@@ -17,25 +35,6 @@ grhead(){
 }
 
 alias woo="git status"
-
-gitbranchNcommits(){
-  git branch $1
-  git reset --hard origin/master
-  git checkout $1
-}
-
-TERM=xterm-256color
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
-
-alias zshconfig="vim ~/.zshrc"
-alias ohmyzsh="vim ~/.oh-my-zsh"
-
-#ALIASES GIT
 alias git_prune='git remote prune origin'
 alias git_prunegit_status='git remote prune origin --dry-run'
 
