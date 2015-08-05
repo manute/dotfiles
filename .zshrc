@@ -29,6 +29,10 @@ export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:$GOPATH/bin:$VIRTUAL_ENV:$PA
 
 ZSH_THEME="robbyrussell"
 
+alias zshconfig="emacsclient ~/.zshrc &"
+alias ohmyzsh="emacsclient ~/.oh-my-zsh &"
+
+
 #ALIASES GIT
 grhead(){
   git rebase -i HEAD~$1
