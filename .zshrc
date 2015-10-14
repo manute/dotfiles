@@ -1,12 +1,11 @@
 #########################
 # CONFIGS
 #######################
+
 export LANG=en_US.UTF-8
 export EDITOR='emacs'
 export TERM=xterm-256color
-
-# Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+export ZSH=/home/manu/.oh-my-zsh
 
 #NET
 alias net_ports=netstat -nlp
@@ -17,21 +16,13 @@ alias open=xdg-open
 
 #EMACS CLIENT
 ec() {
-    emacsclient $1 &
+    emacsclient -n $1 &
 }
-
-#Virtual wrapper http://virtualenvwrapper.readthedocs.org/en/latest/
-VIRTUAL_ENV=$HOME/.virtualenvs/
-
-export GOPATH=$HOME/go
-
-export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:$GOPATH/bin:$VIRTUAL_ENV:$PATH
 
 ZSH_THEME="robbyrussell"
 
 alias zshconfig="emacsclient ~/.zshrc &"
 alias ohmyzsh="emacsclient ~/.oh-my-zsh &"
-
 
 #ALIASES GIT
 grhead(){
@@ -44,17 +35,33 @@ alias git_prunegit_status='git remote prune origin --dry-run'
 
 alias cleanpyc="find . -name '*.pyc' -exec rm {} \;"
 
+######### VIRTUALENV ##########################
+
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/projects
+export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
+source /usr/local/bin/virtualenvwrapper_lazy.sh
+
+###################################
 prstat(){
   sv status $1
 }
 
-#JAVA 
-#export JAVA_HOME="/usr/lib/jvm/java-7-oracle"
+CASK=$HOME/.cask
 
-plugins=( git ruby lighthouse git-flow brew zsh-syntax-highlighting )
+export ELM_HOME=$HOME/npm-global/bin/elm
+
+export GOPATH=$HOME/go
+export GOROOT=$HOME/goroot/go
+
+export RUST_SRC_PATH=$HOME/.rust/src
+export RACER_TARGET=$HOME/.racer/target/release/racer
+
+export PATH="$CASK/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$GOROOT/bin:$GOPATH/bin:$HOME/bin:$HOME/npm-global/bin:$HOME/.rbenv/bin:$RACER_TARGET:$PATH"
+
+plugins=( git lighthouse git-flow zsh-syntax-highlighting )
 
 source $ZSH/oh-my-zsh.sh
-source /usr/local/bin/virtualenvwrapper.sh
 
 PROMPT='%{$reset_color%}%n %{$fg[green]%}{%{$reset_color%}%~%{$fg[green]%}}%{$reset_color%}$(git_prompt_info)%{$fg[green]%}%{$fg[red]%} $%{$reset_color%} '
 
