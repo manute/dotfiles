@@ -43,6 +43,13 @@ export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
 source /usr/local/bin/virtualenvwrapper_lazy.sh
 
 ###################################
+
+
+####################################################
+# Monitor SQL SHELL
+# watch -t -n 1 "echo 'Query\tTime\tSQL\n'; echo 'show full processlist' | mysql -B -u USERDBNAME -h IPHOST -P PORT -pPASWWD DBNAME -A | cut -f 1,6,8 | grep -v ^Id | sort -r -n -k 2"
+#####################################################
+
 prstat(){
   sv status $1
 }
