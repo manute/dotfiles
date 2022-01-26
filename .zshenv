@@ -25,7 +25,4 @@ export GOBIN=/Users/manute/go/bin
 # for checking all paths: /usr/libexec/java_home -V
 export JAVA_HOME=$(/usr/libexec/java_home -v 11)
 
-export AWS_PROFILE=okta
-export AWS_SDK_LOAD_CONFIG=1
-
 export PATH="/usr/local/opt/make/libexec/gnubin:/usr/local/bin:/usr/local/sbin:usr/sbin:/usr/bin:/sbin:/bin:$GOROOT/bin:$GOPATH/bin:$NVM_BIN:$JAVA_HOME/bin:/Users/manute/.npm-global/bin:$PATH"
