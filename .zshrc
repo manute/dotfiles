@@ -1,79 +1,114 @@
-#########################
-# CONFIGS
-#######################
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-export LANG=en_US.UTF-8
-export EDITOR='emacs'
-export TERM=xterm-256color
-export ZSH=/home/manu/.oh-my-zsh
+autoload -Uz add-zsh-hook
 
-#NET
+# Path to your oh-my-zsh installation.
 alias net_ports=netstat -nlp
 alias net_all=netstat -a -n -p -l
 
-#OPEN
-alias open=xdg-open
+# EMACS DAEMON
+# The empty -a parameter means that if no daemon exists, it should start one in the background and retry.
+# The -c option means that a new frame (window) should be created instead of reusing an existing one.
+# "$@" means that when the script is invoked with a path as command-line
 
-#EMACS CLIENT
-ec() {
-    emacsclient -n $1 &
+# emacs client when used within the terminal
+alias ec='emacsclient -a "" -t "$@"'
+# This will shutdown the emacs daemon immediately with out prompting or saving files.
+alias eck="emacsclient -e '(kill-emacs)'"
+
+# emacs client when used as Window X11
+# alias ec='emacsclient -a "" "$@"'
+
+alias zshconfig="ec ~/.zshrc"
+alias zshenv="ec ~/.zshenv"
+alias ohmyzsh="ec ~/.oh-my-zsh"
+
+
+# workpath directories
+WORK_PATH=$HOME/go/src/github.com/
+
+alias gowork="cd $WORK_PATH"
+
+alias docker-stop-all="docker stop $(docker ps -a -q)"
+alias docker-prune="docker system prune"
+alias docker-prune-all="docker system prune -a"
+
+alias kx="kubectx"
+alias kn="kubens"
+alias kt="stern"
+
+# get all services with in a cluster and the nodePorts they use (if any)
+alias ksvc="kubectl get --all-namespaces svc -o json | jq -r '.items[] | [.metadata.name,([.spec.ports[].nodePort | tostring ] | join(\"|\"))] | @csv'"
+
+# shortcuts for frequent kubernetes commands
+function krun() { name=$1; shift; image=$1; shift; kubectl run -it --generator=run-pod/v1 --image $image $name -- $@; }
+function klogs() { kubectl logs $*;}
+function kexec(){ pod=$1; shift; kubectl exec -it $pod -- $@; }
+
+# workspaces terraform
+tws() { terraform workspace select $@ ; direnv reload ; }
+
+load-tfswitch() {
+  local tfswitchrc_path=".tfswitchrc"
+
+  if [ -f "$tfswitchrc_path" ]; then
+    tfswitch
+  fi
 }
+add-zsh-hook chpwd load-tfswitch
+load-tfswitch
 
-ZSH_THEME="robbyrussell"
+# kubectl load custom clusters - context
+# source $HOME/.config/kube/kubeconfig.sh
 
-alias zshconfig="emacsclient ~/.zshrc &"
-alias ohmyzsh="emacsclient ~/.oh-my-zsh &"
+# https://unix.stackexchange.com/questions/431805/zsh-is-there-a-problem-with-always-enabling-extended-glob
+# setopt extended_glob
 
-#ALIASES GIT
-grhead(){
-  git rebase -i HEAD~$1
-}
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="sobole"
+SOBOLE_THEME_MODE="light"
 
-alias woo="git status"
-alias git_prune='git remote prune origin'
-alias git_prunegit_status='git remote prune origin --dry-run'
+# plugins=(git zsh-syntax-highlighting zsh-kubectl-prompt git-prompt ssh-agent keychain kubectl terraform fzf-tab)
+plugins=(git zsh-syntax-highlighting zsh-kubectl-prompt git-prompt ssh-agent keychain kubectl terraform fzf-tab)
 
-alias cleanpyc="find . -name '*.pyc' -exec rm {} \;"
+zstyle :omz:plugins:keychain agents gpg,ssh
+zstyle :omz:plugins:keychain identities github_rsa
 
-######### VIRTUALENV ##########################
+# fzf for everything
+zstyle ':completion:*' fzf-search-display true
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# preview directory's content with exa when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# switch group using `,` and `.`
+zstyle ':fzf-tab:*' switch-group ',' '.'
 
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/projects
-export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
-source /usr/local/bin/virtualenvwrapper_lazy.sh
-
-###################################
-
-
-####################################################
-# Monitor SQL SHELL
-# watch -t -n 1 "echo 'Query\tTime\tSQL\n'; echo 'show full processlist' | mysql -B -u USERDBNAME -h IPHOST -P PORT -pPASWWD DBNAME -A | cut -f 1,6,8 | grep -v ^Id | sort -r -n -k 2"
-#####################################################
-
-prstat(){
-  sv status $1
-}
-
-CASK=$HOME/.cask
-
-export ELM_HOME=$HOME/npm-global/bin/elm
-
-export GOPATH=$HOME/go
-export GOROOT=$HOME/goroot/go
-
-export RUST_SRC_PATH=$HOME/.rust/src
-export RACER_TARGET=$HOME/.racer/target/release/racer
-
-export PATH="$CASK/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$GOROOT/bin:$GOPATH/bin:$HOME/bin:$HOME/npm-global/bin:$HOME/.rbenv/bin:$RACER_TARGET:$PATH"
-
-plugins=( git lighthouse git-flow zsh-syntax-highlighting )
-
+# User configuration
 source $ZSH/oh-my-zsh.sh
 
-PROMPT='%{$reset_color%}%n %{$fg[green]%}{%{$reset_color%}%~%{$fg[green]%}}%{$reset_color%}$(git_prompt_info)%{$fg[green]%}%{$fg[red]%} $%{$reset_color%} '
+# RPROMPT='%{$fg[magenta]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
+RPROMPT=''
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[yellow]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%}!"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
-ZSH_THEME_GIT_PROMPT_CLEAN=""
+alias pip="pip3"
+eval "$(pyenv init --path)"
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/kustomize kustomize
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/kustomize kustomize
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+eval "$(direnv hook zsh)"
