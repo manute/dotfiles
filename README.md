@@ -1,4 +1,4 @@
-my_config
+dotfiles
 =========
 
 Configurations of my machine
